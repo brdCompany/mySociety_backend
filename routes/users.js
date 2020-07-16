@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../models/User');
 
 // api base - /api/v1/users
 
@@ -15,6 +16,7 @@ router.get('/:id', (req, res) => {
 
 // create user - POST - /api/v1/users
 router.post('/', (req, res) => {
+  User.create(req.body);
   res.status(200).json({ msg: 'Create user' });
 });
 
