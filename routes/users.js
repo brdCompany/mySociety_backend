@@ -5,12 +5,25 @@ const User = require('../models/User');
 // api base - /api/v1/users
 
 // get all users - GET - /api/v1/users
-router.get('/', (req, res) => {
-  res.status(200).json({ msg: 'Get all users' });
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).send({ msg: 'Server Error' });
+  }
 });
 
-// get single user GET - /api/v1/users/:id
-router.get('/:id', (req, res) => {
+// get single user GET - /api/v1/users/:email
+router.get('/:email', async (req, res) => {
+  try {
+    console.log(req.params.email);
+    const user = await User.findOne({ email: req.params.email });
+
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).json({ msg: 'Server Error' });
+  }
   res.status(200).json({ msg: 'Get single users' });
 });
 
