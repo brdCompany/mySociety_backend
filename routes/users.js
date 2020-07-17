@@ -1,40 +1,49 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const User = require("../models/User");
+const User = require('../models/User');
 
 // api base - /api/v1/users
 
 // get all users - GET - /api/v1/users
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const users = await User.find();
-    res.status(200).json(users);
+    res.status(200).json({ msg: 'success', data: users });
   } catch (error) {
-    res.status(500).send({ msg: "Server Error" });
+    res.status(500).send({ msg: 'Server Error' });
   }
 });
 
 // get single user GET - /api/v1/users/:email
-router.get("/:email", async (req, res) => {
+router.get('/:email', async (req, res) => {
   try {
     console.log(req.params.email);
     const user = await User.findOne({ email: req.params.email });
-
-    res.status(200).send(user);
+    if (!user) {
+      return res.status(400).json({ msg: 'Error creating User' });
+    }
+    res.status(200).json({ msg: 'success', data: user });
   } catch (error) {
-    res.status(500).json({ msg: "Server Error" });
+    res.status(500).json({ msg: 'Server Error' });
   }
-  res.status(200).json({ msg: "Get single users" });
 });
 
 // create user - POST - /api/v1/users
-router.post("/", (req, res) => {
-  User.create(req.body);
-  res.status(200).json({ msg: "Create user" });
+router.post('/', async (req, res) => {
+  try {
+    const user = await User.create(req.body);
+    if (!user) {
+      return res.status(400).json({ msg: 'Error creating User' });
+    }
+    res.status(200).json({ msg: 'Success', data: user });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ msg: 'Server Error' });
+  }
 });
 
 // update user - PUT - /api/v1/users/:id
-router.put("/:id", async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const user = new User({
       _id: req.params.id,
@@ -46,22 +55,22 @@ router.put("/:id", async (req, res) => {
     });
     User.updateOne({ _id: req.params.id }, user).then((result) => {
       console.log(result);
-      res.status(200).json({ message: "User details successfully Updated !." });
+      res.status(200).json({ message: 'User details successfully Updated !.' });
     });
   } catch (error) {
-    res.status(500).json({ msg: "Server Error" });
+    res.status(500).json({ msg: 'Server Error' });
   }
 });
 
 // delele user - DELETE - /api/v1/users/:id
-router.delete("/:email", async (req, res) => {
+router.delete('/:email', async (req, res) => {
   try {
     User.deleteOne({ email: req.params.email }).then((result) => {
       console.log(result);
-      res.status(200).json({ message: "User successfully deleted from DB!" });
+      res.status(200).json({ message: 'User successfully deleted from DB!' });
     });
   } catch (error) {
-    res.status(500).json({ msg: "Server Error" });
+    res.status(500).json({ msg: 'Server Error' });
   }
 });
 
