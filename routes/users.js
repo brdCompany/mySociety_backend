@@ -17,14 +17,14 @@ router.get('/', async (req, res) => {
 // get single user GET - /api/v1/users/:email
 router.get('/:email', async (req, res) => {
   try {
-    console.log(req.params.email);
     const user = await User.findOne({ email: req.params.email });
-    if (!user) {
-      return res.status(400).json({ msg: 'Error creating User' });
-    }
+    // if (!user) {
+    //   return res.status(400).json({ msg: 'Error getting User' });
+    // }
     res.status(200).json({ msg: 'success', data: user });
   } catch (error) {
-    res.status(500).json({ msg: 'Server Error' });
+    //res.status(500).json({ msg: 'Server Error' });
+    next(error);
   }
 });
 
