@@ -7,6 +7,7 @@ const errorHandler = require('./middleware/error');
 const users = require('./routes/users');
 const bills = require('./routes/bills');
 const payments = require('./routes/payments');
+const auth = require('./routes/auth');
 
 // Configure env vars
 dotenv.config({ path: './config/config.env' });
@@ -24,6 +25,7 @@ connectDb();
 app.use('/api/v1/users', users);
 app.use('/api/v1/bills', bills);
 app.use('/api/v1/payments', payments);
+app.use('/api/v1/auth', auth);
 app.use(errorHandler);
 
 app.listen(
