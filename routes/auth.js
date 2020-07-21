@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// create user - POST - /api/v1/auth
+// login user - POST - /api/v1/auth
 router.post('/login', (req, res) => {
   try {
     let fetchedUser;
