@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-const protect = async (req, res, next) => {
+// allow only logged in users to access routes
+exports.protect = async (req, res, next) => {
   let token;
   //get token from request header
   if (
@@ -34,4 +35,15 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = protect;
+//authorize routes based on role
+exports.authorize = (role) => {
+  return (req, res, next) => {
+    if (!role === req.user.role) {
+      res.status(401).json({
+        success: false,
+        msg: `User role ${req.user.role} is unauthorized to access this route`,
+      });
+    }
+    next();
+  };
+};
