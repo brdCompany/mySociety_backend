@@ -14,11 +14,11 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: [true, 'Please provide a password'],
   },
-  phone: {
+  phoneNumber: {
     type: String,
     required: [true, 'Please provide a phone'],
   },
-  flat: {
+  flatNo: {
     type: String,
     required: [true, 'Please provide a Flat No'],
   },

@@ -23,6 +23,22 @@ app.use(express.json());
 //Connect db
 connectDb();
 
+app.use((req, res, next) => {
+  console.log('Setting headers for CORS');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PATCH, PUT, OPTIONS, DELETE'
+  );
+  if (req.method === 'OPTIONS') {
+    return res.status(200).json({});
+  }
+  next();
+});
 app.use('/api/v1/users', protect, authorize('admin'), users);
 app.use('/api/v1/bills', protect, bills);
 app.use('/api/v1/payments', protect, payments);
