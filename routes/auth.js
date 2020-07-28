@@ -30,7 +30,7 @@ router.post('/login', (req, res) => {
       .then((user) => {
         if (!user) {
           return res.status(401).json({
-            message: 'User Authentication failed',
+            message: 'User Authentication failed. Invalid Credentials',
           });
         }
         fetchedUser = user;
@@ -40,7 +40,7 @@ router.post('/login', (req, res) => {
         if (!result) {
           console.log(result);
           return res.status(401).json({
-            message: 'User Authentication failed',
+            message: 'User Authentication failed. Invalid Credentials',
           });
         }
         const token = jsonwebtoken.sign(
