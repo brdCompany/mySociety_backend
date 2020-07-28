@@ -25,7 +25,8 @@ router.post('/register', async (req, res) => {
 router.post('/login', (req, res) => {
   try {
     let fetchedUser;
-    User.findOne({ email: req.body.email })
+    console.log(req.body);
+    User.findOne({ email: req.body.email, role: req.body.role })
       .then((user) => {
         if (!user) {
           return res.status(401).json({
