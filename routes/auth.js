@@ -3,6 +3,7 @@ const router = express('Router');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
+const { json } = require('express');
 
 // create user - POST - /api/v1/auth
 router.post('/register', async (req, res) => {
@@ -22,38 +23,42 @@ router.post('/register', async (req, res) => {
 });
 
 // login user - POST - /api/v1/auth
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   try {
-    let fetchedUser;
-    console.log(req.body);
-    User.findOne({ email: req.body.email, role: req.body.role })
-      .then((user) => {
-        if (!user) {
-          return res.status(401).json({
-            message: 'User Authentication failed. Invalid Credentials',
-          });
-        }
-        fetchedUser = user;
-        return bcrypt.compare(req.body.password, user.password);
-      })
-      .then((result) => {
-        if (!result) {
-          console.log(result);
-          return res.status(401).json({
-            message: 'User Authentication failed. Invalid Credentials',
-          });
-        }
-        const token = jsonwebtoken.sign(
-          { email: fetchedUser.email },
-          process.env.TOKEN_SECRET_ID,
-          { expiresIn: '1h' }
-        );
-        res.status(200).json({
-          token: token,
-          expiresIn: 3600,
-        });
+    const fetchedUser = await User.findOne({
+      email: req.body.email,
+      role: req.body.role,
+    });
+    if (!fetchedUser) {
+      return res.status(401).json({
+        success: false,
+        message: 'User not found. Authentification failed',
       });
+    }
+    //If found then match password
+    isPasswordMatched = await bcrypt.compare(
+      req.body.password,
+      fetchedUser.password
+    );
+
+    if (!isPasswordMatched) {
+      return res.status(401).json({
+        success: false,
+        message: 'Passwords donot match. Authentification failed',
+      });
+    }
+
+    const token = jsonwebtoken.sign(
+      { email: fetchedUser.email },
+      process.env.TOKEN_SECRET_ID,
+      { expiresIn: '1h' }
+    );
+    res.status(200).json({
+      token: token,
+      expiresIn: 3600,
+    });
   } catch (error) {
+    console.log('line 60');
     res.status(500).json({
       msg: 'Server Error',
     });
