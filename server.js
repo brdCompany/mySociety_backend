@@ -25,7 +25,6 @@ app.use(express.json());
 connectDb();
 
 app.use((req, res, next) => {
-  console.log('Setting headers for CORS');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
     'Access-Control-Allow-Headers',
@@ -43,7 +42,7 @@ app.use((req, res, next) => {
 app.use('/api/v1/users', protect, authorize('admin'), users);
 app.use('/api/v1/bills', protect, bills);
 app.use('/api/v1/payments', protect, payments);
-app.use('/api/v1/notices', protect, authorize('admin'), notices);
+app.use('/api/v1/notices', protect, notices);
 app.use('/api/v1/auth', auth);
 app.use(errorHandler);
 

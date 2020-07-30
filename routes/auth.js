@@ -9,7 +9,6 @@ const { json } = require('express');
 router.post('/register', async (req, res) => {
   try {
     const salt = await bcrypt.genSalt(10);
-    console.log(req.body.password);
     req.body.password = await bcrypt.hash(req.body.password, salt);
     const user = await User.create(req.body);
     if (!user) {
@@ -58,7 +57,6 @@ router.post('/login', async (req, res) => {
       expiresIn: 3600,
     });
   } catch (error) {
-    console.log('line 60');
     res.status(500).json({
       msg: 'Server Error',
     });

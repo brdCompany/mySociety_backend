@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const NoticeSchema = mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
   content: {
     type: String,
     required: true,
@@ -9,7 +13,7 @@ const NoticeSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  expiresIn: {
+  expiresOn: {
     type: Date,
     default: Date.now,
   },
