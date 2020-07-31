@@ -53,15 +53,14 @@ router.post('/', async (req, res) => {
 });
 
 // /:id - PUT - Update notice
-router.put('/:id', async (req, res) => {
+router.put('/', async (req, res) => {
   try {
-    let notice = await Notice.findOneAndUpdate(req.params.id, req.body);
+    let notice = await Notice.findByIdAndUpdate(req.body._id, req.body);
     if (!notice) {
       return res
         .status(404)
         .json({ success: false, msg: 'Could not update notice' });
     }
-
     res.status(200).json({ success: true, data: notice });
   } catch (error) {
     console.log(error.message);
