@@ -10,6 +10,7 @@ const bills = require('./routes/bills');
 const payments = require('./routes/payments');
 const auth = require('./routes/auth');
 const notices = require('./routes/notice');
+const email = require('./routes/email');
 
 // Configure env vars
 dotenv.config({ path: './config/config.env' });
@@ -44,6 +45,7 @@ app.use('/api/v1/bills', protect, bills);
 app.use('/api/v1/payments', protect, payments);
 app.use('/api/v1/notices', protect, notices);
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/email', protect, email);
 app.use(errorHandler);
 
 app.listen(
