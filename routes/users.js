@@ -14,10 +14,10 @@ router.get('/', async (req, res) => {
   }
 });
 
-// get single user GET - /api/v1/users/:email
-router.get('/:email', async (req, res) => {
+// get single user GET - /api/v1/users/:id
+router.get('/:id', async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.params.email });
+    const user = await User.findById({ _id: req.params.id });
     if (!user) {
       return res.status(400).json({ msg: 'Error getting User' });
     }
@@ -28,30 +28,25 @@ router.get('/:email', async (req, res) => {
   }
 });
 
-// update user - PUT - /api/v1/users/:id
-router.put('/:id', async (req, res) => {
+// update user - PUT - /api/v1/users/
+router.put('/', async (req, res) => {
   try {
-    const user = new User({
-      _id: req.params.id,
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
-      flat: req.body.flat,
-      block: req.body.block,
-    });
-    User.updateOne({ _id: req.params.id }, user).then((result) => {
-      console.log(result);
-      res.status(200).json({ message: 'User details successfully Updated !.' });
-    });
+    let user = await User.findByIdAndUpdate(req.body._id, req.body);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, msg: 'Could not update owner' });
+    }
+    res.status(200).json({ success: true, data: user });
   } catch (error) {
     res.status(500).json({ msg: 'Server Error' });
   }
 });
 
 // delele user - DELETE - /api/v1/users/:id
-router.delete('/:email', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
-    User.deleteOne({ email: req.params.email }).then((result) => {
+    User.findByIdAndDelete({ _id: req.params.id }).then((result) => {
       console.log(result);
       res.status(200).json({ message: 'User successfully deleted from DB!' });
     });
